@@ -9,6 +9,8 @@ Outputs (WAV 44.1 kHz/16-bit stereo + MP3 320k):
   01_heartbeat_intro_62-to-124bpm  - breath, solo heartbeat, beatbox joins, doubles to 124
   02_heartbeat_beatbox_loop_124bpm - seamless 4-bar loop to run under the whole song
   03_heartbeat_outro_124-to-62bpm  - groove strips back, heart halves, slows, last beat, exhale
+  04_heartbeat_tail_only_62bpm     - heartbeat only, slows to a stop; append after any Suno take
+  05_voice_recording_guide_...     - headphone guide for recording a Suno Voices sample (F minor -> G minor)
 """
 import os
 import subprocess
@@ -298,6 +300,47 @@ def make_outro():
     return render(tr, tail_fade=1.2)
 
 
+# ---------------------------------------------------------------- 04 tail
+def make_tail():
+    """Heartbeat only (no groove): append after any Suno take's last bar."""
+    tr = Track(12.0)
+    t = 0.05
+    for k in range(4):  # steady 62 BPM
+        heartbeat(tr, t, amp=0.6 - 0.03 * k, muffle=800 - 30 * k, verb=0.08)
+        t += 2 * BEAT
+    for k, iv in enumerate([1.0, 1.08, 1.18, 1.3]):  # ritardando, fading
+        heartbeat(tr, t, amp=0.5 - 0.08 * k, gap=E8 + 0.02 * k, muffle=650 - 60 * k, verb=0.08)
+        t += iv
+    tr.put(breath(1.3, inhale=False, amp=0.09), t + 0.3, verb=0.25)
+    return render(tr, tail_fade=1.0)
+
+
+# ---------------------------------------------------------------- 05 recording guide
+def pad(chord_hz, seconds, amp=0.12):
+    n = int(seconds * SR)
+    t = np.arange(n) / SR
+    x = np.zeros(n)
+    for f in chord_hz:
+        for h, a in ((1, 1.0), (2, 0.35), (3, 0.15)):
+            x += a * np.sin(2 * np.pi * f * h * t + rng.uniform(0, 6.28)) * (1 + 0.003 * np.sin(2 * np.pi * 0.3 * t))
+    e = np.minimum(1, t / 0.6) * np.minimum(1, (seconds - t) / 0.4)
+    return amp * lp(x, 1800) * e / len(chord_hz)
+
+
+def make_guide():
+    """Headphone guide for recording the Suno Voices sample: count-in, loop, F minor pad -> G minor."""
+    FM = [174.61, 207.65, 261.63]   # F3 Ab3 C4
+    GM = [196.00, 233.08, 293.66]   # G3 Bb3 D4
+    tr = Track(25 * BAR + 1.0)
+    for b in range(4):  # 1-bar count-in on inward-K clicks
+        tr.put(k_snare(0.7 if b == 0 else 0.5), b * BEAT, verb=0.05)
+    for i in range(24):
+        groove_bar(tr, (1 + i) * BAR, level=0.55, fill=("pf-k" if i % 4 == 3 else None))
+    tr.put(pad(FM, 16 * BAR), 1 * BAR, gain=1.0, verb=0.2)
+    tr.put(pad(GM, 8 * BAR), 17 * BAR, gain=1.0, verb=0.2)
+    return render(tr, tail_fade=0.8)
+
+
 def save(name, x, title):
     wav = os.path.join(OUT, name + ".wav")
     mp3 = os.path.join(OUT, name + ".mp3")
@@ -315,3 +358,5 @@ if __name__ == "__main__":
     save("01_heartbeat_intro_62-to-124bpm", make_intro(), "Heartbeat Intro (62 -> 124 BPM)")
     save("02_heartbeat_beatbox_loop_124bpm", make_loop(), "Heartbeat Beatbox Loop (124 BPM, 4 bars)")
     save("03_heartbeat_outro_124-to-62bpm", make_outro(), "Heartbeat Outro (124 -> 62 BPM)")
+    save("04_heartbeat_tail_only_62bpm", make_tail(), "Heartbeat Tail (append after the song)")
+    save("05_voice_recording_guide_124bpm_Fm-to-Gm", make_guide(), "Voice Recording Guide (headphones only)")
