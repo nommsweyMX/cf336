@@ -4,6 +4,8 @@ A Eurovision grand-final anthem on a deep house / melodic techno chassis, in you
 
 **The idea:** the six chapter titles are one complete Spanish small-talk exchange (*¡Hola, buenos días! → ¿Cómo estás? → Bien, gracias, ¿y tú? → ¡Muy bien también, gracias! → Qué bueno → Que tengas un buen día*). That becomes the call-and-response chorus. The book's thesis, *"You are not what you say. You are what you repeat"*, is the hook, and the form of a house track (repetition) proves it. A resting heartbeat at 62 BPM is exactly half of the 124 BPM house tempo, so the heart doubles into the kick at the start and halves back to a stop at the end.
 
+> **Finished track:** a complete local render of the song, with no Suno, is in [`release/`](release/README.md). It has the full song and an instrumental as WAV, FLAC and MP3, plus all 15 channels as separate FLAC stems. The code that made it is in [`production/`](production/).
+
 | File | What it is |
 |---|---|
 | [`SUNO_PASTE.md`](SUNO_PASTE.md) | **Copy-paste sheet:** title, style prompt, exclude list, lyrics (two versions), settings, section map, and the source of every borrowed line |

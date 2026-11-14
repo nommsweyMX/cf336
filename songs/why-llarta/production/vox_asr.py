@@ -6,7 +6,8 @@ import unicodedata
 import numpy as np
 from scipy.signal import resample_poly
 
-SCRATCH = "/tmp/claude-0/-home-user-cf336/c7c99ebc-57ee-5e7f-9a20-477ea4b0b187/scratchpad"
+# Working folder for models, render cache and stems (git-ignored). Override with WHY_LLARTA_WORK.
+SCRATCH = os.environ.get("WHY_LLARTA_WORK", os.path.join(os.path.dirname(os.path.abspath(__file__)), "work"))
 ASR_DIR = os.environ.get("VOX_ASR_DIR", os.path.join(SCRATCH, "models", "asr", "sherpa-onnx-whisper-small"))
 
 _REC = {}

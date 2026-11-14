@@ -137,7 +137,7 @@ CH = {
     "c4_echo": _N("3 .5 63 gra; 3.5 .5 60 cias"),
     "c5_lead": _N("0 .5 60 You; .5 .5 60 are; 1 .5 63 not; 1.5 .5 60 what; 2 .5 58 you; 2.5 1.25 56 say"),
     "c6_lead": _N("0 .5 60 You; .5 .5 60 are; 1 .5 63 what; 1.5 .5 65 you; 2 .5 63 re; 2.5 1.25 60 peat"),
-    "c7_lead": _N("0 .5 56 Said; .5 .75 60 once; 1.25 .25 60 it's; 1.5 .5 58 a; 2 .5 56 sen; 2.5 1 55 tence"),
+    "c7_lead": _N("0 .5 56 Said; .5 .5 60 once; 1.25 .25 60 it's; 1.5 .5 58 a; 2 .5 56 sen; 2.5 1 55 tence"),
     "c8_lead": _N("0 .5 55 Lived; .5 .5 56 dai; 1 .5 58 ly; 1.5 .5 60 a; 2 .5 63 heart; 2.5 .5 60 beat"),
     "c8_echo": _N("3 .25 53 ba; 3.25 .25 53 dum; 3.5 .25 53 ba; 3.75 .25 53 dum"),
 }
