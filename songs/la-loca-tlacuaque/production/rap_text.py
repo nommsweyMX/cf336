@@ -2,6 +2,7 @@
 Kokoro/espeak phoneme string, and the FLOW: which swung sixteenth every rap syllable lands on.
 
     mexican(ph)                    Castilian espeak phonemes -> Mexican (θ->s, ʎ->ʝ, unstressed i/u + vowel -> j/w)
+    full_vowels(ph, chars)         secondary stress on every unstressed syllable (sung lines: no vowel reduction)
     syllabify_es(chars)            -> (syllables, joins)   one syllable per vowel nucleus; joins = possible mergers
     apply_joins(syls, which)       merge syllable k+1 into k (synalepha / syneresis)
     rhyme_index(syls)              index of the LAST primary-stressed syllable (the rhyme stress)
@@ -38,6 +39,17 @@ def mexican(ph):
     return "".join(out)
 
 
+def full_vowels(ph, chars):
+    """Singing does not reduce vowels: mark every unstressed syllable with secondary stress, so the decoder
+    gives 'cu-' and 'co-' of "culón, colito" a full /u/ and /o/ instead of a murmur (measured on the hook:
+    Whisper hears "culón colito" instead of "culan calita"). chars = the tokens of ph."""
+    syls, _ = syllabify_es(chars)
+    out = list(chars)
+    for s in sorted((s for s in syls if s["stress"] == 0), key=lambda s: -s["nuc"][0]):
+        out.insert(s["nuc"][0], "ˌ")
+    return "".join(out)
+
+
 def _cls(c):
     if c in VOWELS:
         return "V"
@@ -58,8 +70,9 @@ def syllabify_es(chars):
       syls[k]  = dict(nuc=[token indices], stress=2 primary / 1 secondary / 0, word=word number,
                       punct=True if punctuation follows the syllable's word and the syllable is word-final)
       joins    = [(k, kind)] where syllable k+1 may be merged into k:
-                 'auto'   synalepha between words, no primary stress involved (or the same vowel twice)
-                 'opt'    synalepha between words involving a stressed vowel
+                 'same'   the same vowel on both sides of a word break (la‿azotea): always one syllable
+                 'auto'   synalepha between words, no primary stress involved (rata‿y, de‿arriba)
+                 'opt'    synalepha between words involving a stressed vowel (cagó‿a)
                  'hiatus' two vowels inside one word (syneresis: last resort)"""
     n = len(chars)
     word_of, w = [], 0
@@ -103,7 +116,7 @@ def syllabify_es(chars):
         if " " in between:
             same = chars[a["nuc"][-1]] == chars[b["nuc"][0]]
             strong = (a["stress"] == 2) + (b["stress"] == 2)
-            kind = "auto" if (strong == 0 or (same and strong < 2)) else "opt"
+            kind = "same" if (same and strong < 2) else ("auto" if strong == 0 else "opt")
         else:
             kind = "hiatus"
         joins.append((k, kind))
@@ -178,6 +191,10 @@ def slot_time(score, bar, pos):
 
 
 # ----------------------------------------------------------------------------- flow
+import os as _os
+SYN_PICKUPS = int(_os.environ.get("RAP_SYN_PICKUPS", 3))    # unstressed synalephas are used once a line needs more pickups
+REST_PICKUPS = int(_os.environ.get("RAP_REST_PICKUPS", 2))  # pickup slots a line may take to afford a comma rest
+PICKUP_COST = 0.45         # ... and what each of them costs (a missing comma rest costs 0.9)
 MAX_STRETCH = 2.0          # a line never spreads wider than 2 slots per syllable on average
 W_POS = 0.5                # weight of (slot - scaled natural onset)^2
 
@@ -195,7 +212,7 @@ def _gap_cost(d, stress, punct):
     return 1e6
 
 
-def _spread(s0, anchor, tau, stress, punct):
+def _spread(s0, anchor, tau, stress, punct, with_cost=False):
     """Slots for syllables 0..L-1 (strictly increasing, first = s0, all < anchor) that follow the natural
     speech rhythm tau (onset times incl. the anchor syllable's, len L+1), by dynamic programming."""
     L = len(stress)
@@ -231,12 +248,15 @@ def _spread(s0, anchor, tau, stress, punct):
             if c < end[0]:
                 end = (c, s)
     if end[1] is None:                       # cannot happen while span <= 4 L; be safe
-        return [s0 + int(round(i * span / L)) for i in range(L)], p
+        fb = [s0 + int(round(i * span / L)) for i in range(L)]
+        return (fb, p, 1e9) if with_cost else (fb, p)
     out, s = [], end[1]
     for i in range(L - 1, -1, -1):
         out.append(s)
         s = best[i][s][1]
-    return out[::-1], p
+    # the position term is relative to this start: compare starts by the gap costs alone
+    gaps = sum(_gap_cost(b_ - a_, stress[i], punct[i]) for i, (a_, b_) in enumerate(zip(out[::-1], out[::-1][1:] + [anchor])))
+    return (out[::-1], p, gaps) if with_cost else (out[::-1], p)
 
 
 def _pick_pairs(K, natdur, stress, punct):
@@ -289,7 +309,7 @@ def flow_line(syls, joins, tau, natdur, anchor=12, lo=-3, hi=15, start_min=None)
 
     def merged(ks):
         s2 = apply_joins(syls, ks)
-        t2, d2, k2 = [], [], 0
+        t2, d2 = [], []
         for k in range(len(syls)):
             if k > 0 and (k - 1) in ks:
                 d2[-1] += natdur[k]
@@ -299,43 +319,42 @@ def flow_line(syls, joins, tau, natdur, anchor=12, lo=-3, hi=15, start_min=None)
         return s2, t2, d2
 
     r0 = rhyme_index(syls)
-    use = set(k for k, kind in joins if kind == "auto" and k + 1 < r0)
-    cur, ctau, cdur = merged(use)
-    r = rhyme_index(cur)
-    avail = anchor - lo_eff
-    crowded = False
-    # a line that would need pickup slots first uses its optional synalephas (cagó‿a, llevó‿al): what fast
-    # speech does anyway, and the previous rhyme gets room to ring
-    soft = anchor - max(lo_eff, 0)
-    if r > soft:
-        cand = [k for k, kind in joins if kind == "opt" and k + 1 < r0]
+    kind_of = dict(joins)
+    use = set()
+
+    def add(kinds, limit, why):
+        """Merge candidates of these kinds (the pair speech says fastest first, never three vowels in one
+        syllable, never the rhyme syllable) until the syllables before the rhyme stress fit `limit` slots."""
+        nonlocal cur, ctau, cdur, r
+        cand = [k for k, kind in joins if kind in kinds and k not in use and k + 1 < r0]
         cand.sort(key=lambda k: min(natdur[k], natdur[k + 1]))
         for k in cand:
-            if r <= soft:
+            if limit is not None and r <= limit:
                 break
             if (k - 1) in use or (k + 1) in use:
                 continue
             use.add(k)
             cur, ctau, cdur = merged(use)
             r = rhyme_index(cur)
-            log.append(f"synalepha at syllable {k} (stressed vowel) to stay near the downbeat")
+            if why:
+                log.append(f"synalepha at syllable {k} ({kind_of[k]}): {why}")
+
+    cur, ctau, cdur = merged(use)
+    r = rhyme_index(cur)
+    add(("same",), None, None)                       # la‿azotea: always
+    soft = anchor - max(lo_eff, 0)                   # slots from the downbeat to the anchor
+    avail = anchor - lo_eff                          # ... including the pickup slots
+    # Clarity first: a vowel keeps its own slot while there is room. The pickup slots the score allows (up to
+    # SYN_PICKUPS of them) are used before two vowels are merged: measured on the final lyric, Whisper recall
+    # of the lines this changes rose (r9 0.33 -> 0.78, r7 0.8 -> 1.0) against merging first and starting at
+    # most one syllable early. Then unstressed synalephas, then synalephas with a stressed vowel, then
+    # syneresis inside words, then thirty-second notes.
+    add(("auto",), min(avail, soft + SYN_PICKUPS), f"to start no earlier than {SYN_PICKUPS} pickup syllable(s)")
+    crowded = False
     if r > avail:
-        # optional synalepha (stressed vowels), then syneresis inside words, weakest (shortest) first
-        for kinds in (("opt",), ("auto", "opt"), ("hiatus",)):
-            cand = [k for k, kind in joins if kind in kinds and k not in use and (k + 1 < r0 or kinds == ("auto", "opt"))
-                    and k + 1 <= r0 and not (k + 1 == r0 and kinds != ("auto", "opt"))]
-            cand.sort(key=lambda k: min(natdur[k], natdur[k + 1]))
-            for k in cand:
-                if r <= avail:
-                    break
-                if (k - 1) in use or (k + 1) in use:
-                    continue                      # no three-vowel pile-ups
-                use.add(k)
-                cur, ctau, cdur = merged(use)
-                r = rhyme_index(cur)
-                log.append(f"extra merge at syllable {k} ({dict(joins)[k]})")
-            if r <= avail:
-                break
+        add(("opt",), avail, "to fit the pickup")
+    if r > avail:
+        add(("hiatus",), avail, "syneresis, to fit the pickup")
     n = len(cur)
     stress = [s["stress"] for s in cur]
     punct = [s["punct"] for s in cur]
@@ -349,10 +368,23 @@ def flow_line(syls, joins, tau, natdur, anchor=12, lo=-3, hi=15, start_min=None)
             s0 = max(lo_eff, 0, anchor - int(MAX_STRETCH * r))
             if s0 % 2 and anchor - (s0 + 1) >= r and s0 > max(lo_eff, 0):
                 s0 += 1
-            if anchor - s0 == r:
-                sl = list(range(s0, anchor))
-            else:
-                sl, _ = _spread(s0, anchor, ctau[:r + 1], stress[:r], punct[:r])
+            best = None
+            # the line may start up to REST_PICKUPS slots before the downbeat if that buys a rest after a
+            # comma (or two slots for a stressed syllable) that the bar itself has no room for
+            for extra in range(0, REST_PICKUPS + 1):
+                st = s0 - extra
+                if extra and (st < lo_eff or s0 > 0):
+                    break
+                if anchor - st == r:
+                    cand, cost = list(range(st, anchor)), sum(_gap_cost(1, a_, b_) for a_, b_ in zip(stress[:r], punct[:r]))
+                else:
+                    cand, _, cost = _spread(st, anchor, ctau[:r + 1], stress[:r], punct[:r], with_cost=True)
+                cost += PICKUP_COST * extra
+                if best is None or cost < best[0] - 1e-9:
+                    best = (cost, cand, extra)
+            sl = best[1]
+            if best[2]:
+                log.append(f"{best[2]} pickup slot(s) taken to give the line a rest")
         else:
             sl = list(range(anchor - r, anchor))          # pickup into the previous bar
         for i, s in enumerate(sl):

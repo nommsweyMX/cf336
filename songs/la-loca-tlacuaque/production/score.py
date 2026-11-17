@@ -89,7 +89,9 @@ def _R(bar, text, anchor=12, lo=-3, hi=15, tts=None, punch=True, role="lead"):
 
 
 def _A(bar, slot, text, slots=3, role="gang", style="shout", pan=0.0, tts=None):
-    """Ad-lib / crowd answer: starts on swung slot `slot` of `bar`, must end within `slots` sixteenths."""
+    """Ad-lib / crowd answer: starts on swung slot `slot` of `bar`, must end within `slots` sixteenths.
+
+    The window may run under the next line's pickup syllables: ad-libs are panned to the sides."""
     ADLIBS.append(dict(id=f"a{bar}_{slot}", bar=bar, slot=slot, slots=slots, text=text, tts_text=tts, role=role,
                        style=style, pan=pan, lang="es"))
 
@@ -129,7 +131,7 @@ SONG_SECONDS = T0 + TOTAL_BARS * BAR + TAIL_SECONDS
 _A(0, 4, "Culón, colito... culón, colito...", slots=12, style="whisper")
 _S(1, 0.0, "¿Oíste eso, carnal? Algo se mueve en la viga...", 7.0)
 _A(3, 0, "¿En la viga? ¡A la verga!", slots=8, pan=-0.3)
-_A(3, 9, "¡Aguas!", slots=3, role="lead")
+_A(3, 9, "¡Aguas!", slots=4, role="lead")
 
 # ------------------------------------------------------------------ verse 1
 _R(4, "Se metió por la viga, la viga de arriba,")
@@ -138,10 +140,10 @@ _R(6, "dos manzanas de vidrio, las joyas del comedor,")
 _F(6, 3.5, "glass", pan=-0.4, seed=0)                     # apple number one
 _F(6, 3.875, "glass", pan=0.4, seed=1, amp=0.9)           # apple number two
 _R(7, "se las llevó al panteón, y luego vino el olor...")
-_A(7, 14, "¡Ahí nos vidrios!", slots=4, pan=-0.45)
+_A(7, 14, "¡Ahí nos vidrios!", slots=6, pan=-0.45)
 _R(8, "se cagó a dos pulgadas de la taza, ¡qué puntería!")
 _R(9, "tenía el trono enfrente y le atinó al azulejo,")
-_A(9, 14, "¡Y ni pagó piso!", slots=4, pan=0.45)
+_A(9, 14, "¡Y ni pagó piso!", slots=6, pan=0.45)
 _R(10, "y se mió en el lavabo la cochina porquería,", tts="y se meó en el lavabo la cochina porquería,")
 _R(11, "¡mapache de la pulga, ni mi tío bien pedo!")
 
@@ -166,11 +168,11 @@ ANS_TLAC = {0: "2.25 .25 50 la; 2.5 .5 53 tla; 3 .5 57 cua; 3.5 .25 53 que",    
 def _hook(b, questions, answers, last_text, last_spec):
     """8 bars: four sung lines, three question (rapper) / answer (gang + kids) bars, the title line."""
     _H(b + 0, "¡Culón, colito! ¡Culón, colito!", H_L1)
-    _A(b + 0, 13, "¡Menéale!", slots=3, role="lead", pan=0.2)
+    _A(b + 0, 13, "¡Menéale!", slots=5, role="lead", pan=0.2)
     _H(b + 1, "Menea la cola poquito, poquito,", H_L2)
     _H(b + 2, "la loca tlacuaque de la Calle Cerrada,", H_L3)
     _H(b + 3, "¡culón, colito, colita pelada!", H_L4)
-    _A(b + 3, 14, "¡Fuchi!", slots=2, pan=-0.4)
+    _A(b + 3, 14, "¡Fuchi!", slots=3, pan=-0.4)
     for k, (q, a) in enumerate(zip(questions, answers)):
         text, tts = q if isinstance(q, tuple) else (q, None)
         _R(b + 4 + k, text, anchor=4, lo=-2, hi=7, punch=False, tts=tts)
@@ -190,7 +192,7 @@ _R(22, "pero al cuarto pa' las doce, justo antes del portazo,")
 _R(23, "se regresó la cabrona y se coló de un chingazo.")
 _F(23, 3.6, "door", pan=-0.2)                               # slam, then the lock clicks on the next downbeat
 _R(24, "Clic, hizo la chapa: quedó bien encerrada,")
-_A(24, 14, "¡No mames!", slots=3, pan=0.45)
+_A(24, 14, "¡No mames!", slots=4, pan=0.45)
 _R(25, "en la casa, sin salida, en la Calle Cerrada,")
 _R(26, "debajo del sillón, la muy desgraciada,")
 _R(27, "enseñando los dientes con la cola enroscada.")
@@ -204,11 +206,11 @@ _hook(28, ["¿Quién se peló?", "¿Quién se regresó?", "¿Quién se escondió
 _A(36, 2, "¡Uiu, uiu!", slots=6, pan=0.4)
 _H(37, "¡Verde, verde, la patrulla verde!", "0 .5 57 ver; .5 .5 53 de; 1 .25 57 ver; 1.25 .25 53 de; 1.5 .25 50 la; "
        "1.75 .25 53 pa; 2 .5 57 tru; 2.5 .5 55 lla; 3 .25 53 ver; 3.25 .25 50 de")
-_A(37, 14, "¡La verde!", slots=3, pan=-0.4)
+_A(37, 14, "¡La verde!", slots=4, pan=-0.4)
 _R(38, "De verde hasta los guantes, porque la loca muerde,", lo=1)
 _R(39, "se bajaron de la troca, más verdes que un nopal,")
 _R(40, "con cuatro Cocas heladas y un pollo asado, carnal,")
-_A(40, 14, "¡Cuatro!", slots=2, pan=0.45)
+_A(40, 14, "¡Cuatro!", slots=4, pan=0.45)
 _R(41, "¿era pa' carnada o el lonche del personal?")
 _A(41, 14, "¡Ja!", slots=2, pan=-0.45)
 _H(42, "¡Verde, verde, la patrulla verde!", "0 .5 55 ver; .5 .5 50 de; 1 .25 55 ver; 1.25 .25 50 de; 1.5 .25 50 la; "
@@ -217,7 +219,7 @@ _F(43, 0.0, "siren", seconds=2.4, pan=0.4)
 
 # ------------------------------------------------------------------ verse 3
 _R(44, "La sacaron del sillón jalándola del rabito,")
-_A(44, 14, "¡Jálale!", slots=3, pan=0.45)
+_A(44, 14, "¡Jálale!", slots=4, pan=0.45)
 _R(45, "se hizo la muertita... ¡ay, qué pinche teatrito!")
 _R(46, "con la lengua de fuera y el culón colito,")
 _R(47, "pa' la jaula, mi reina, ¡ya llegó tu taxito!")
