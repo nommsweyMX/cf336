@@ -216,8 +216,8 @@ def render():
             B["piano"].add(X.piano(root + 12, 2.2, 0.6), S.t(bar, 0), pan=-0.3)
             B["piano"].add(X.piano(voic[0], 1.0, 0.42), S.t(bar, 2), pan=-0.2)
             B["piano"].add(X.piano(voic[2], 1.0, 0.42), S.t(bar, 3), pan=-0.1)
-            if i % 4 == 0:
-                B["fx"].add(X.siren(S.BAR * 0.95, 0.30), S.t(bar, 0), pan=-0.5 if i % 8 == 0 else 0.5)
+            if i == 0:                                 # one whoop to open the bridge; later ones are score FX
+                B["fx"].add(X.siren(S.BAR * 0.95, 0.30), S.t(bar, 0), pan=-0.5)
 
         # ------------------------------------------------------------ INTRO / OUTRO: the jingle alone
         else:
@@ -239,7 +239,7 @@ def render():
                 B["fx"].add(X.sub_drop(0.6), S.t(bar, 0))
 
     # ---------------- vinyl crackle: intro, outro and tail loud; a whisper of it under the verses
-    cr = X.crackle(S.SONG_SECONDS, 1.0)[:N]
+    cr = X.crackle(S.SONG_SECONDS + 0.5, 1.0)[:N]
     g = np.zeros(N)
     for name, start, n, _, _ in S.SECTIONS:
         typ = S.section_of(start)[1]
