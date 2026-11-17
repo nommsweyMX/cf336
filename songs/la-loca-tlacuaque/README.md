@@ -7,4 +7,5 @@ Hard, raspy Monterrey-style barrio rap in the verses; a bouncy schoolyard "¡Cul
 | Path | What it is |
 |---|---|
 | [`SUNO_PASTE.md`](SUNO_PASTE.md) | **Copy-paste sheet for Suno:** title, style prompt, exclude list, lyrics, fixes if Suno gets it wrong, English line-by-line, slang glossary |
+| [`release/`](release/) | **The finished track, rendered locally:** full song and instrumental as WAV, FLAC and MP3, the 14 channel stems, and the measured specs and caveats |
 | [`production/`](production/) | The code that renders the song locally, with no Suno: score, beat, vocals, mix |

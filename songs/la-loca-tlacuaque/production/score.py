@@ -160,19 +160,23 @@ H_L4 = ("-0.25 .25 49 cu; 0 .75 52 lón; .75 .25 49 co; 1 .5 55 li; 1.5 .25 52 t
 H_TITLE = ("-0.25 .25 52 la; 0 .5 55 lo; .5 .25 55 ca; .75 .25 52 tla; 1 .25 57 cua; 1.25 .25 55 que; 1.5 .25 52 de; "
            "1.75 .25 52 la; 2 .5 55 ca; 2.5 .25 52 lle; 2.75 .25 49 ce; 3 .5 52 rra; 3.5 .5 50 da")
 H_TITLE_Y = "-0.75 .25 52 y; -0.5 .25 52 u; " + H_TITLE.replace("-0.25 .25 52 la;", "-0.25 .25 52 na;", 1)
-ANS_TLAC = {0: "2.25 .25 50 la; 2.5 .5 53 tla; 3 .5 57 cua; 3.5 .25 53 que",       # over Dm
-            1: "2.25 .25 48 la; 2.5 .5 52 tla; 3 .5 55 cua; 3.5 .25 52 que",       # over C
-            2: "2.25 .25 50 la; 2.5 .5 53 tla; 3 .5 58 cua; 3.5 .25 53 que"}       # over Bb
+ANS_TLAC = {0: "2.5 .25 50 la; 2.75 .25 53 tla; 3 .5 57 cua; 3.5 .5 53 que",       # over Dm
+            1: "2.5 .25 48 la; 2.75 .25 52 tla; 3 .5 55 cua; 3.5 .5 52 que",       # over C
+            2: "2.5 .25 50 la; 2.75 .25 53 tla; 3 .5 58 cua; 3.5 .5 53 que"}       # over Bb
 
 
-def _hook(b, questions, answers, last_text, last_spec):
-    """8 bars: four sung lines, three question (rapper) / answer (gang + kids) bars, the title line."""
+def _hook(b, questions, answers, last_text, last_spec, shout=False):
+    """8 bars: four sung lines, three question (rapper) / answer (gang + kids) bars, the title line.
+
+    `shout` adds the "¡Menéale!" side shout over the first line; it is kept for the last hook only, so the
+    first two hooks state the line with nothing on top of it."""
     _H(b + 0, "¡Culón, colito! ¡Culón, colito!", H_L1)
-    _A(b + 0, 13, "¡Menéale!", slots=5, role="lead", pan=0.2)
+    if shout:
+        _A(b + 0, 13, "¡Menéale!", slots=4, pan=0.45)
     _H(b + 1, "Menea la cola poquito, poquito,", H_L2)
     _H(b + 2, "la loca tlacuaque de la Calle Cerrada,", H_L3)
     _H(b + 3, "¡culón, colito, colita pelada!", H_L4)
-    _A(b + 3, 14, "¡Fuchi!", slots=3, pan=-0.4)
+    _A(b + 3, 13, "¡Fuchi!", slots=3, pan=-0.4)
     for k, (q, a) in enumerate(zip(questions, answers)):
         text, tts = q if isinstance(q, tuple) else (q, None)
         _R(b + 4 + k, text, anchor=4, lo=-2, hi=7, punch=False, tts=tts)
@@ -233,7 +237,7 @@ _hook(52, ["¿Y quién se la llevó?", "¿Con cuántas Cocas?", "¿Y cuántos po
       [("¡La patrulla verde!", "1.5 .25 50 la; 1.75 .25 53 pa; 2 .5 57 tru; 2.5 .5 55 lla; 3 .5 57 ver; 3.5 .5 53 de"),
        ("¡Cuatro!", "2.5 .5 55 cua; 3 .25 52 tro"),
        ("¡Uno!", "2.5 .5 58 u; 3 .25 53 no")],
-      "¡Y una loca tlacuaque de la Calle Cerrada!", H_TITLE_Y)
+      "¡Y una loca tlacuaque de la Calle Cerrada!", H_TITLE_Y, shout=True)
 
 # ------------------------------------------------------------------ outro
 _S(60, 0.5, "Y que alguien tape el pinche hoyo de la viga, carnal.", 6.5)
