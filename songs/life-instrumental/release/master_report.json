@@ -1,0 +1,15 @@
+{
+ "master": {
+  "lufs": -13.1,
+  "true_peak": -1.1,
+  "lra": 10.2,
+  "master_gain_db": -1.2599999999999987,
+  "glue_gr_max": 3.745626487902051,
+  "lim_gr_max": 2.230882706387423,
+  "lim_gr_mean_db": 0.0692941786356636,
+  "lim_gr_p95": 0.47421487844549204,
+  "pre_peak_db": 4.37503491823679
+ },
+ "stems_gain_db": -5.163808431102632,
+ "stems_note": "stems are pre-master (before the whole-mix gestures, the glue compressor and the limiter); they sum to the mix at a common gain of stems_gain_db"
+}
