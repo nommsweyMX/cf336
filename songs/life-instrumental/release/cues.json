@@ -1,0 +1,387 @@
+[
+ {
+  "t": 0.0,
+  "stem": "fx_time",
+  "cue": "clock tick (one per second)"
+ },
+ {
+  "t": 2.0,
+  "stem": "fx_time",
+  "cue": "keyboard typing"
+ },
+ {
+  "t": 3.5,
+  "stem": "fx_time",
+  "cue": "calendar chime"
+ },
+ {
+  "t": 4.5,
+  "stem": "fx_time",
+  "cue": "rubber stamp"
+ },
+ {
+  "t": 13.0,
+  "stem": "fx_time",
+  "cue": "hammer"
+ },
+ {
+  "t": 17.0,
+  "stem": "fx_time",
+  "cue": "hammer"
+ },
+ {
+  "t": 30.3,
+  "stem": "fx_place",
+  "cue": "suitcase wheels on cobblestones"
+ },
+ {
+  "t": 30.5,
+  "stem": "fx_place",
+  "cue": "heat shimmer"
+ },
+ {
+  "t": 33.0,
+  "stem": "fx_place",
+  "cue": "surf"
+ },
+ {
+  "t": 36.867,
+  "stem": "fx_place",
+  "cue": "applause for the bay taking its bow"
+ },
+ {
+  "t": 41.667,
+  "stem": "fx_time",
+  "cue": "rubber stamp: the verdict, \"awful\""
+ },
+ {
+  "t": 51.6,
+  "stem": "fx_place",
+  "cue": "suitcase wheels, leaving fast"
+ },
+ {
+  "t": 54.0,
+  "stem": "fx_time",
+  "cue": "distant clock, slowing to a stop"
+ },
+ {
+  "t": 62.6,
+  "stem": "fx_place",
+  "cue": "sandal footsteps (a street corner)"
+ },
+ {
+  "t": 65.0,
+  "stem": "mallets",
+  "cue": "doorway laugh (played on marimba and flute)"
+ },
+ {
+  "t": 77.4,
+  "stem": "fx_place",
+  "cue": "suitcase wheels, slow (the return)"
+ },
+ {
+  "t": 80.5,
+  "stem": "fx_place",
+  "cue": "surf on the bay"
+ },
+ {
+  "t": 87.0,
+  "stem": "fx_place",
+  "cue": "broom on a sidewalk"
+ },
+ {
+  "t": 104.0,
+  "stem": "fx_house",
+  "cue": "shower: the water pressure dips"
+ },
+ {
+  "t": 111.0,
+  "stem": "fx_house",
+  "cue": "the lights flicker once"
+ },
+ {
+  "t": 114.0,
+  "stem": "fx_place",
+  "cue": "cafe murmur (wordless)"
+ },
+ {
+  "t": 114.0,
+  "stem": "fx_place",
+  "cue": "espresso steam"
+ },
+ {
+  "t": 114.5,
+  "stem": "fx_place",
+  "cue": "cup on saucer"
+ },
+ {
+  "t": 117.0,
+  "stem": "fx_house",
+  "cue": "message ping"
+ },
+ {
+  "t": 121.75,
+  "stem": "fx_house",
+  "cue": "phone camera"
+ },
+ {
+  "t": 124.0,
+  "stem": "fx_place",
+  "cue": "sandal footsteps that keep walking, then stop"
+ },
+ {
+  "t": 131.0,
+  "stem": "fx_house",
+  "cue": "a burst of pings"
+ },
+ {
+  "t": 134.0,
+  "stem": "fx_house",
+  "cue": "small gears turning (grand pause)"
+ },
+ {
+  "t": 134.9,
+  "stem": "fx_house",
+  "cue": "mosquito"
+ },
+ {
+  "t": 137.6,
+  "stem": "fx_house",
+  "cue": "the mirror: a glass tone that sharpens"
+ },
+ {
+  "t": 140.0,
+  "stem": "fx_house",
+  "cue": "flashlight click"
+ },
+ {
+  "t": 141.0,
+  "stem": "fx_house",
+  "cue": "leak dripping, one drop a second"
+ },
+ {
+  "t": 164.7,
+  "stem": "fx_place",
+  "cue": "two footsteps"
+ },
+ {
+  "t": 166.0,
+  "stem": "fx_place",
+  "cue": "a shop's metal shutter going up"
+ },
+ {
+  "t": 166.667,
+  "stem": "fx_place",
+  "cue": "broom on a sidewalk"
+ },
+ {
+  "t": 173.3,
+  "stem": "fx_house",
+  "cue": "corner-shop till"
+ },
+ {
+  "t": 175.5,
+  "stem": "fx_house",
+  "cue": "mains hum, the voltage sagging (the CFE report)"
+ },
+ {
+  "t": 177.0,
+  "stem": "fx_house",
+  "cue": "electrical crackle"
+ },
+ {
+  "t": 182.0,
+  "stem": "fx_time",
+  "cue": "one stamp: the report is filed"
+ },
+ {
+  "t": 195.4,
+  "stem": "fx_house",
+  "cue": "message pings begin"
+ },
+ {
+  "t": 198.0,
+  "stem": "fx_time",
+  "cue": "clock tick"
+ },
+ {
+  "t": 199.0,
+  "stem": "fx_house",
+  "cue": "thumbs typing replies"
+ },
+ {
+  "t": 199.8,
+  "stem": "fx_house",
+  "cue": "message pings, every five eighths"
+ },
+ {
+  "t": 206.0,
+  "stem": "fx_house",
+  "cue": "a low grinding tone (the cost accumulating)"
+ },
+ {
+  "t": 206.4,
+  "stem": "fx_house",
+  "cue": "a second layer of pings, every seven eighths"
+ },
+ {
+  "t": 211.0,
+  "stem": "fx_house",
+  "cue": "knock at the door (nobody called ahead)"
+ },
+ {
+  "t": 215.5,
+  "stem": "fx_house",
+  "cue": "card terminal"
+ },
+ {
+  "t": 219.5,
+  "stem": "fx_house",
+  "cue": "hiss: everything stops"
+ },
+ {
+  "t": 220.5,
+  "stem": "fx_house",
+  "cue": "phone buzzing, unanswered"
+ },
+ {
+  "t": 221.0,
+  "stem": "fx_place",
+  "cue": "one wave"
+ },
+ {
+  "t": 223.5,
+  "stem": "fx_house",
+  "cue": "pings nobody answers"
+ },
+ {
+  "t": 228.0,
+  "stem": "fx_house",
+  "cue": "dialing: he calls ahead"
+ },
+ {
+  "t": 228.9,
+  "stem": "fx_house",
+  "cue": "ringing tone, and someone picks up"
+ },
+ {
+  "t": 230.0,
+  "stem": "fx_time",
+  "cue": "soft hammer taps, one per new note"
+ },
+ {
+  "t": 263.5,
+  "stem": "fx_place",
+  "cue": "record scratch"
+ },
+ {
+  "t": 264.6,
+  "stem": "fx_house",
+  "cue": "scrabbling in the roof beam"
+ },
+ {
+  "t": 266.5,
+  "stem": "fx_house",
+  "cue": "thud: she drops from the beam"
+ },
+ {
+  "t": 270.5,
+  "stem": "fx_house",
+  "cue": "glass apple no. 1"
+ },
+ {
+  "t": 271.5,
+  "stem": "fx_house",
+  "cue": "glass apple no. 2"
+ },
+ {
+  "t": 272.5,
+  "stem": "fx_house",
+  "cue": "a trickle, two inches from the toilet"
+ },
+ {
+  "t": 273.25,
+  "stem": "fx_house",
+  "cue": "...and in the sink"
+ },
+ {
+  "t": 276.0,
+  "stem": "fx_house",
+  "cue": "pool splash"
+ },
+ {
+  "t": 279.0,
+  "stem": "fx_house",
+  "cue": "the door slams"
+ },
+ {
+  "t": 279.4,
+  "stem": "fx_house",
+  "cue": "and locks"
+ },
+ {
+  "t": 281.5,
+  "stem": "fx_house",
+  "cue": "possum hiss, from under the sofa"
+ },
+ {
+  "t": 282.0,
+  "stem": "fx_house",
+  "cue": "la patrulla verde knocks (in the greeting's rhythm)"
+ },
+ {
+  "t": 285.5,
+  "stem": "fx_house",
+  "cue": "one last hiss as she is carried out"
+ },
+ {
+  "t": 286.0,
+  "stem": "fx_house",
+  "cue": "Coca no. 1"
+ },
+ {
+  "t": 286.5,
+  "stem": "fx_house",
+  "cue": "Coca no. 2"
+ },
+ {
+  "t": 287.0,
+  "stem": "fx_house",
+  "cue": "Coca no. 3"
+ },
+ {
+  "t": 287.5,
+  "stem": "fx_house",
+  "cue": "Coca no. 4"
+ },
+ {
+  "t": 287.5,
+  "stem": "fx_place",
+  "cue": "surf, calm"
+ },
+ {
+  "t": 287.75,
+  "stem": "leads",
+  "cue": "one pollo (a muted-trumpet 'bok')"
+ },
+ {
+  "t": 289.1,
+  "stem": "fx_house",
+  "cue": "the leak, still dripping"
+ },
+ {
+  "t": 291.5,
+  "stem": "fx_house",
+  "cue": "a message ping..."
+ },
+ {
+  "t": 293.0,
+  "stem": "mallets",
+  "cue": "doorway laugh (played on marimba and flute)"
+ },
+ {
+  "t": 297.5,
+  "stem": "fx_place",
+  "cue": "one last sweep of the broom"
+ }
+]
